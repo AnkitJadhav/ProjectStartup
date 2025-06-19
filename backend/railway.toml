@@ -1,0 +1,11 @@
+[build]
+builder = "NIXPACKS"
+buildCommand = "pip install -r requirements.txt"
+
+[deploy]
+startCommand = "python pdf_rag_backend_api.py"
+restartPolicyType = "ON_FAILURE"
+
+[variables]
+PORT = "5000"
+PYTHON_VERSION = "3.11.0" 
