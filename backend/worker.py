@@ -9,9 +9,12 @@ import redis
 from rq import Queue, Worker, Connection
 import torch
 
+# Get environment variables
+REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379')
+MAX_MEMORY_MB = int(os.getenv('MAX_MEMORY_MB', 512))
+
 # Initialize Redis connection
-redis_url = os.getenv('REDIS_URL', 'redis://localhost:6379')
-redis_conn = redis.from_url(redis_url)
+redis_conn = redis.from_url(REDIS_URL)
 queue = Queue(connection=redis_conn)
 
 def clear_gpu_memory():

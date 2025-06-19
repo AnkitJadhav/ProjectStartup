@@ -8,6 +8,12 @@ services:
         value: 5000
       - key: PYTHON_VERSION
         value: 3.11.0
+      - key: REDIS_URL
+        value: redis://localhost:6379
+      - key: CORS_ORIGINS
+        value: "https://*.vercel.app,http://localhost:3000"
+      - key: MAX_MEMORY_MB
+        value: 512
     disk:
       name: data
       mountPath: /app/uploads

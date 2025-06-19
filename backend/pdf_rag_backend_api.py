@@ -12,18 +12,23 @@ import worker
 # Initialize FastAPI app
 app = FastAPI(title="PDF RAG API")
 
+# Get environment variables
+REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379')
+CORS_ORIGINS = os.getenv('CORS_ORIGINS', 'http://localhost:3000,https://*.vercel.app').split(',')
+PORT = int(os.getenv('PORT', 5000))
+MAX_MEMORY_MB = int(os.getenv('MAX_MEMORY_MB', 512))
+
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", "https://*.vercel.app"],
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # Initialize Redis and RQ
-redis_url = os.getenv('REDIS_URL', 'redis://localhost:6379')
-redis_conn = redis.from_url(redis_url)
+redis_conn = redis.from_url(REDIS_URL)
 queue = Queue(connection=redis_conn)
 
 # Configure upload settings
@@ -148,5 +153,4 @@ async def get_job_status(job_id: str) -> Dict[str, Any]:
 
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.environ.get("PORT", 5000))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    uvicorn.run(app, host="0.0.0.0", port=PORT)
